@@ -22,9 +22,10 @@ class GrammarLogic:
         self.fnc_productions = None
 
     def set_grammar(self, start_symbol_str, terminals_str, non_terminals_str, productions_list):
-        """ Parsea y valida (simplificado) la entrada de la gramática """
+        """ Parsea y valida la entrada de la gramática """
         self.clear()
         error_messages = []
+
 
         # 1. Símbolo Inicial (Tratar como cadena, validar después si está en NT)
         self.start_symbol = start_symbol_str.strip()
@@ -44,6 +45,7 @@ class GrammarLogic:
         self.non_terminals = set(nt.strip() for nt in non_terminals_str.split(',') if nt.strip())
         if not self.non_terminals:
              error_messages.append("Error: No se definieron no terminales.")
+
 
         # 4. Validar si el Símbolo Inicial esta en los No Terminales
         if self.start_symbol and self.start_symbol not in self.non_terminals:
@@ -75,8 +77,11 @@ class GrammarLogic:
             if not rhs_str:
                 production = [EPSILON] # Se usa el símbolo interno
             else:
-                production = []
+                production = list(rhs_str) # Si solo es un solo caracter
+                temp_productions[lhs].append(production)
+                print(production)
                 
+        """En caso de que se quiera usar con varios caracteres
                 # Aquí asumimos que el usuario usa símbolos definidos en T o NT
                 # Necesitamos poder parsear símbolos de múltiples caracteres si se definieron así
                 # Estrategia: Intentar hacer match con los símbolos definidos (el más largo primero)
@@ -98,19 +103,18 @@ class GrammarLogic:
                 #          production = None # Marcar como inválida
                 #          break
                 if production is None: continue # Saltar si hubo error
-            
-            if production:
-                temp_productions[lhs].append(production)
+        """
 
         if not productions_list and not error_messages: # Verificar si la lista original estaba vacía
-             error_messages.append("Error: No se han definido producciones.")
-
-        # Si no hay errores hasta ahora, asignamos las producciones
+            error_messages.append("Error: No se han definido producciones.")
+        
+        # Si no se encontro errores asignamos las producciones
         if not error_messages:
+            print(temp_productions)
             self.productions = temp_productions
             # Verificar si S tiene producciones (si S fue válido)
             if self.start_symbol in self.non_terminals and self.start_symbol not in self.productions:
-                 error_messages.append(f"Advertencia: El símbolo inicial '{self.start_symbol}' no tiene producciones definidas.")
+                error_messages.append(f"Advertencia: El símbolo inicial '{self.start_symbol}' no tiene producciones definidas.")
 
         return error_messages
 
