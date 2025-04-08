@@ -239,11 +239,10 @@ class GrammarLogic:
 
         processed_productions = defaultdict(list)
 
-        # Copia inicial
         for lhs, rules in self.productions.items():
             processed_productions[lhs].extend(rules)
 
-        # --- Pasos (Muy simplificados) ---
+        # --- Pasos  ---
         # 1. Intriducir nuevos NT para terminales en RHS mixtas (A -> aB => A -> Xa B, Xa -> a)
         #    (Ignoraremos eliminación de epsilon y unitarias por simplicidad aquí)
         introduce_new_nt_map = {} # terminal -> new_non_terminal
@@ -266,7 +265,7 @@ class GrammarLogic:
                              # Reemplazar en la regla actual
                              new_rule[i] = introduce_new_nt_map[symbol]
                  
-                 # 2. Reducir RHS > 2 (A -> BCD => A -> X1 D, X1 -> BC) (Simplificado)
+                 # 2. Reducir RHS > 2 (A -> BCD => A -> X1 D, X1 -> BC) 
                  while len(new_rule) > 2:
                       # Tomar los dos primeros B, C
                       B, C = new_rule[0], new_rule[1]
@@ -312,9 +311,7 @@ class GrammarLogic:
 
 
     def run_cyk(self, input_string):
-        """ Ejecuta el algoritmo CYK para validar la cadena (requiere FNC). 
-            (MISMA IMPLEMENTACIÓN QUE ANTES, pero usa self.fnc_productions que viene de la conversión simplificada)
-        """
+        """ Ejecuta el algoritmo CYK para validar la cadena (requiere FNC).   """
         if not self.fnc_productions:
             try:
                 if not self.convert_to_fnc(): # Intenta conversión y actualiza self.fnc_productions
@@ -432,7 +429,7 @@ class GrammarLogic:
             final_string = "".join(final_string_list)
             
             # Contar longitud basada en los símbolos terminales originales
-            # Esto es crucial si los terminales tienen > 1 caracter
+            # importante si los terminales tienen > 1 caracter
             current_n = 0
             temp_final_string = final_string
             while temp_final_string:
