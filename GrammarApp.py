@@ -47,7 +47,7 @@ class GrammarApp:
         self.logic.terminals_var = self.terminals_var 
 
 
-        ttk.Label(grammar_frame, text="No Terminales (NT) (e.g., S,A,Expr):").grid(row=2, column=0, sticky=tk.W)
+        ttk.Label(grammar_frame, text="No Terminales (NT) (e.g., S,A,B):").grid(row=2, column=0, sticky=tk.W)
         self.non_terminals_var = tk.StringVar()
         self.non_terminals_entry = ttk.Entry(grammar_frame, textvariable=self.non_terminals_var, width=50, font=('Helvetica', 10))
         self.non_terminals_entry.grid(row=2, column=1, columnspan=3, sticky=tk.W+tk.E)
