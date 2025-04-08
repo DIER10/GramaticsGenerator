@@ -80,31 +80,7 @@ class GrammarLogic:
                 production = list(rhs_str) # Si solo es un solo caracter
                 temp_productions[lhs].append(production)
                 print(production)
-                
-        """En caso de que se quiera usar con varios caracteres
-                # Aquí asumimos que el usuario usa símbolos definidos en T o NT
-                # Necesitamos poder parsear símbolos de múltiples caracteres si se definieron así
-                # Estrategia: Intentar hacer match con los símbolos definidos (el más largo primero)
-                # temp_rhs_str = rhs_str
-                # while temp_rhs_str:
-                #     found_match = False
-                #     # Priorizar símbolos más largos (ej. 'id' vs 'i')
-                #     sorted_symbols = sorted(list(valid_symbols), key=len, reverse=True)
-                #     for sym in sorted_symbols:
-                #         if temp_rhs_str.startswith(sym):
-                #             production.append(sym)
-                #             temp_rhs_str = temp_rhs_str[len(sym):]
-                #             found_match = True
-                #             break
-                #     if not found_match:
-                #          # Si no se encontró match, hay un error o símbolo no definido
-                #          bad_char = temp_rhs_str[0] # O el símbolo no parseado
-                #          error_messages.append(f"Error en Producción {i+1}: Símbolo/Secuencia iniciando con '{bad_char}' en '{rhs_str}' no es T o NT válido.")
-                #          production = None # Marcar como inválida
-                #          break
-                if production is None: continue # Saltar si hubo error
-        """
-
+    
         if not productions_list and not error_messages: # Verificar si la lista original estaba vacía
             error_messages.append("Error: No se han definido producciones.")
         
