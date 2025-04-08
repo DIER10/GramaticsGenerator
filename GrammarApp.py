@@ -39,7 +39,7 @@ class GrammarApp:
         self.start_symbol_entry = ttk.Entry(grammar_frame, textvariable=self.start_symbol_var, width=15, font=('Helvetica', 10))
         self.start_symbol_entry.grid(row=0, column=1, sticky=tk.W)
 
-        ttk.Label(grammar_frame, text="Terminales (T) (e.g., a,b,id):").grid(row=1, column=0, sticky=tk.W)
+        ttk.Label(grammar_frame, text="Terminales (T) (e.g., a,b,c):").grid(row=1, column=0, sticky=tk.W)
         self.terminals_var = tk.StringVar()
         self.terminals_entry = ttk.Entry(grammar_frame, textvariable=self.terminals_var, width=50, font=('Helvetica', 10))
         self.terminals_entry.grid(row=1, column=1, columnspan=3, sticky=tk.W+tk.E)
@@ -88,8 +88,6 @@ class GrammarApp:
         self.add_production_row() # Añadir la primera fila inicial
 
 
-        # --- Secciones Validación Tipo, Cadena y Generación (Sin cambios en estructura GUI)---
-        # (Se omiten por brevedad, son las mismas de la versión anterior)
         # --- Sección Validación Tipo ---
         type_frame = ttk.LabelFrame(main_frame, text="2. Tipo de Gramática", padding="10")
         type_frame.pack(fill=tk.X, pady=5)
@@ -135,8 +133,6 @@ class GrammarApp:
         self.generated_strings_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
 
-    # --- Métodos GUI Modificados ---
-
     def add_production_row(self):
         """ Añade una fila de widgets para ingresar una producción (con botón Remove) """
         row_frame = ttk.Frame(self.productions_frame)
@@ -150,7 +146,7 @@ class GrammarApp:
         rhs_entry = ttk.Entry(row_frame, font=('Helvetica', 10))
         rhs_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0,5))
 
-        remove_button = ttk.Button(row_frame, text="X", width=2, style="Toolbutton", # Estilo opcional
+        remove_button = ttk.Button(row_frame, text="X", width=2, style="Toolbutton", 
                                   command=lambda rf=row_frame: self.remove_production_row(rf))
         remove_button.pack(side=tk.RIGHT)
 
@@ -181,10 +177,6 @@ class GrammarApp:
             # Eliminar de la lista interna
             del self.production_rows_widgets[index_to_remove]
 
-            # Asegurarse de que siempre haya al menos una fila (opcional)
-            # if not self.production_rows_widgets:
-            #     self.add_production_row() # Añadir una vacía si se eliminan todas
-
             # Actualizar scroll region
             self.productions_frame.update_idletasks()
             self.productions_canvas.configure(scrollregion=self.productions_canvas.bbox("all"))
@@ -201,13 +193,6 @@ class GrammarApp:
                  productions_list.append((lhs_val, rhs_val))
         return productions_list
 
-
-    # --- Métodos _parse_and_validate_grammar, validate_grammar_type_action, ---
-    # --- validate_string_action, generate_strings_action                   ---
-    # --- (Estos no cambian su lógica interna fundamentalmente, solo llaman ---
-    # --- al _collect_productions y set_grammar simplificados)              ---
-    # (Se omiten por brevedad, son los mismos de la versión anterior en cuanto a flujo)
-    
     def _parse_and_validate_grammar(self):
         """ Orquesta la lectura y validación (simplificada) de la gramática """
         start_symbol = self.start_symbol_var.get()
@@ -229,7 +214,6 @@ class GrammarApp:
                  messagebox.showwarning("Advertencia de Gramática", error_str)
                  # Permitir continuar pero marcar tipo como indefinido
                  self.grammar_type_label.config(text="Tipo: (Corregir advertencias)", style="Result.TLabel") 
-                 # Podríamos permitir validar tipo aun con advertencias
                  # return True # O False si queremos que corrijan advertencias también
                  return True # Dejamos continuar
 
@@ -238,7 +222,7 @@ class GrammarApp:
     def validate_grammar_type_action(self):
         """ Acción del botón 'Validar Tipo de Gramática' """
         self.grammar_type_label.config(text="Tipo: Validando...", style="Result.TLabel")
-        self.master.update_idletasks() # Forzar actualización visual
+        self.master.update_idletasks() # Actualización visual
 
         if not self._parse_and_validate_grammar():
              # Si _parse_and_validate retorna False por errores fatales
